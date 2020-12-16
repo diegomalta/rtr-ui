@@ -7,7 +7,9 @@ import Example from './components/Example';
 
 function App() {
   return (
-       <RtrForm />
+    <div>
+      <RtrForm />
+    </div>
 //<Example />
   );
 }
