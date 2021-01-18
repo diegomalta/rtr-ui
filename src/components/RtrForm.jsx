@@ -1,6 +1,14 @@
 import React, { useState } from "react";
+import * as email from "../services/EmailContent";
 
 const FormKeys = {
+  company: "Company",
+  account: "Account",
+
+  nameRecluter: "NameRecluter",
+  emailRecluter: "EmailRecluter",
+  phoneRecluter: "PhoneRecluter",
+
   fistnameCandidate: "FistnameCandidate",
   miCandidate: "MICandidate",
   lastnameCandidate: "LastNameCandidate",
@@ -17,6 +25,11 @@ const FormKeys = {
 function RtrForm() {
   const [company, setCompany] = useState("Technosoft");
   const [account, setAccount] = useState("Deloitte");
+
+  // Recluter
+  const [nameRecluter, setNameRecluter] = useState("");
+  const [emailRecluter, setEmailRecluter] = useState("");
+  const [phoneRecluter, setPhoneRecluter] = useState("");
 
   // Candidate
   const [fistnameCandidate, setFirstnameCandidate] = useState("");
@@ -57,7 +70,13 @@ function RtrForm() {
   };
 
   const handleChange = ({ currentTarget: input }) => {
-    if (input.id === FormKeys.fistnameCandidate) {
+    if (input.id === FormKeys.nameRecluter) {
+      setNameRecluter(input.value);
+    } else if (input.id === FormKeys.emailRecluter) {
+      setEmailRecluter(input.value);
+    } else if (input.id === FormKeys.phoneRecluter) {
+      setPhoneRecluter(input.phoneRecluter);
+    } else if (input.id === FormKeys.fistnameCandidate) {
       setFirstnameCandidate(input.value);
     } else if (input.id === FormKeys.miCandidate) {
       setMiCandidate(input.value);
@@ -82,7 +101,35 @@ function RtrForm() {
 
   const handleClick = () => {
     const element = document.createElement("a");
-    const file = new Blob(["<html>please click the next link </html>"], {
+
+    let parameter = {
+      company: company,
+      account: account,      
+
+      fistnameCandidate: fistnameCandidate,
+      miCandidate: miCandidate,
+      lastnameCandidate: lastnameCandidate,
+
+      requirementNo: requirementNo,
+      role: role,
+      clientName: clientName,
+      location: location,
+      worktype: worktype
+    };
+
+    // console.log(parameter);
+
+    // console.log(email.getBody(parameter));
+
+    const file = new Blob(
+      [`<html>Hi ${fistnameCandidate},
+       <a href="mailto:${emailRecluter}?subject=${email.getSubject()}&body=${email.getBody(parameter)}"
+       >Click here to send response</a>
+       </br>
+       Regards,<br/>
+       ${nameRecluter}
+      </html>`
+      ], {
       type: "text/plain;charset=utf-8",
     });
     element.href = URL.createObjectURL(file);
@@ -159,32 +206,41 @@ function RtrForm() {
             <h1 className="font-semibold mb-3 text-xl">Recluter</h1>
 
             <div className="mb-1">
-              <label className="block tracking-wide text-xs font-bold mb-1">
+              <label htmlFor={FormKeys.nameRecluter}
+                className="block tracking-wide text-xs font-bold mb-1">
                 Name
               </label>
               <input
+                id={FormKeys.nameRecluter}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
             <div className="mb-1">
-              <label className="block tracking-wide text-xs font-bold mb-1">
+              <label htmlFor={FormKeys.emailRecluter}
+                className="block tracking-wide text-xs font-bold mb-1">
                 Email
               </label>
               <input
+                id={FormKeys.emailRecluter}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
             <div className="mb-1">
-              <label className="block tracking-wide text-xs font-bold mb-1">
+              <label htmlFor={FormKeys.phoneRecluter}
+              className="block tracking-wide text-xs font-bold mb-1">
                 Phone
               </label>
               <input
+                id={FormKeys.phoneRecluter}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
           </div>
@@ -218,6 +274,7 @@ function RtrForm() {
                 id={FormKeys.miCandidate}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
@@ -232,6 +289,7 @@ function RtrForm() {
                 id={FormKeys.lastnameCandidate}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
@@ -246,6 +304,7 @@ function RtrForm() {
                 id={FormKeys.emailCandidate}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
@@ -260,6 +319,7 @@ function RtrForm() {
                 id={FormKeys.phoneCandidate}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
           </div>
@@ -275,6 +335,7 @@ function RtrForm() {
                 id={FormKeys.requirementNo}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
@@ -286,6 +347,7 @@ function RtrForm() {
                 id={FormKeys.Role}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
@@ -297,6 +359,7 @@ function RtrForm() {
                 id={FormKeys.clientName}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
@@ -308,6 +371,7 @@ function RtrForm() {
                 id={FormKeys.location}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
 
@@ -319,6 +383,7 @@ function RtrForm() {
                 id={FormKeys.worktype}
                 className="rounded py-1 px-2 mb-2 w-full"
                 type="text"
+                onChange={(e) => handleChange(e)}
               ></input>
             </div>
           </div>
@@ -327,7 +392,7 @@ function RtrForm() {
         <div className="flex flex-col md:flex-row mb-3 shadow md:rounded-lg">
           <div className="md:flex-auto p-2 mx-2">
             <label className="block tracking-wide text-xs font-bold mb-1">
-              Work Type
+              Comments
             </label>
             <input
               className="rounded py-1 px-2 mb-2 w-full"
